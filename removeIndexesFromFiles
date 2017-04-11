@@ -1,0 +1,16 @@
+# remove indexes and other rubbish from file names with rename
+
+rename 's/AAGAGGCA-//' *.fastq # forward indexes
+rename 's/GTAGAGGA-//' *.fastq
+rename 's/GCTCATGA-//' *.fastq
+rename 's/AGGCAGAA-//' *.fastq
+rename 's/TCCTGAGC-//' *.fastq
+rename 's/GGACTCCT-//' *.fastq
+rename 's/ATCTCAGG-//' *.fastq
+rename 's/TAAGGCGA-//' *.fastq
+rename 's/CGTACTAG-//' *.fastq
+rename 's/TAGGCATG-//' *.fastq
+rename 's/CTCTCTAC-//' *.fastq
+rename 's/CGAGGCTG-//' *.fastq
+rename 's/_CGTCTAAT_L002//' *.fastq #rev indexes
+rename 's/_TCTCTCCG_L002//' *.fastq
