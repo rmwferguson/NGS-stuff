@@ -14,3 +14,7 @@ rename 's/CTCTCTAC-//' *.fastq
 rename 's/CGAGGCTG-//' *.fastq
 rename 's/_CGTCTAAT_L002//' *.fastq #rev indexes
 rename 's/_TCTCTCCG_L002//' *.fastq
+rename 's/_CTCTCTAT_L002//' *.fastq
+rename 's/_GTAAGGAG_L002//' *.fastq
+rename 's/_TATCCTCT_L002//' *.fastq
+rename 's/_ACTGCATA_L002//' *.fastq
