@@ -75,7 +75,12 @@ for f in *R1*.fastq; do pandaseq -f $f -r ${f%R1_trimmed.00.0_0.cor.fastq}R2_tri
 
 cd pairedSamples 
 
-# adjust seq headers and then combine into one file
+# adjust seq headers and then combine into one file 
+#can not use _ in sample name
+
+rename 's/_/-/' *.fasta
+rename 's/paired//' *.fasta
+
 
 for f in *.fasta;
 do sample=">$(echo $f | awk -F "." '{print $1}')_" 
