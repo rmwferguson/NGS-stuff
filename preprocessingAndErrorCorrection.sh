@@ -77,7 +77,10 @@ cd pairedSamples
 
 # adjust seq headers and then combine into one file
 
-for f in *.fasta; do sample=">$(echo $f | awk -F "." '{print $1}')_" sed -i "s/>/$sample/" $f; done
+for f in *.fasta;
+do sample=">$(echo $f | awk -F "." '{print $1}')_" 
+sed -i "s/>/$sample/" $f
+done
 
 cat *.fasta > seqs.fna
 
