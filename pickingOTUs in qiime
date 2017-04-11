@@ -1,0 +1,62 @@
+#useing qimme to pick De Novo OTUs and assign taxonomy and make OTU table
+
+cd methodsPaper/seqs
+
+#call qiime
+
+qiime
+
+#count how many seqs in each sample
+
+count_seqs.py -i seqs.fna
+
+#methods paper seq data from HiSeq
+
+#data summary after preprocessing
+
+517501  : seqs.fna (Sequence lengths (mean +/- std): 403.9957 +/- 44.3027)
+517501  : Total
+
+Using 1 processors.
+
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	4	4	0	1	1
+2.5%-tile:	1	219	219	0	4	12938
+25%-tile:	1	402	402	0	4	129376
+Median: 	1	407	407	0	5	258751
+75%-tile:	1	427	427	0	5	388126
+97.5%-tile:	1	428	428	0	8	504564
+Maximum:	1	556	556	21	222	517501
+Mean:	1	403.996	403.996	0.0038454	4.98112
+# of Seqs:	517501
+
+Output File Names: 
+seqs.summary
+
+#pick OTUs deNovo with USEARCH61
+pick_otus.py -i seqs.fna -m usearch61 -o usearch_97 -s 0.97 --suppress_reference_chimera_detection
+
+#pick rep otus
+pick_rep_set.py -i usearch_97/seqs_otus.txt -f seqs.fna -o rep_set.fna
+
+# assign tax to rep seqs
+assign_taxonomy.py -i rep_set.fna -m rdp -o assigned_taxonomy
+
+#make otu table
+make_otu_table.py -i usearch_97/seqs_otus.txt -t assigned_taxonomy/rep_set_tax_assignments.txt -o otu_table.biom
+
+#make plots needs map file
+summarize_taxa_through_plots.py -o taxa_summary -i otu_table.biom
+
+#convert biom to human readable
+
+#quit qiime
+exit
+
+biom convert -i otu_table.biom --to-tsv --table-type="OTU table" --header-key taxonomy -o otu_table.txt
+
+#summarise biom/otu table
+
+
+
+
