@@ -93,8 +93,21 @@ cp seqs.fna /home/rob/methodsPaper/seqs/
 cd /home/rob/methodsPaper/seqs/
 
 now ready for Qimme analysis. 
+#######################################################################################################################
+#####IF Sickle and SPAdes are in PATH
+
+mkdir qualTrimmed
+
+for file in *_R1.fastq; do sickle pe -f $file -r ${file%_R1.fastq}_R2.fastq -t sanger -o qualTrimmed/${file%.fastq}_trimmed.fastq -p qualTrimmed/${file%R1.fastq}R2_trimmed.fastq -s qualTrimmed/${file%_R1.fastq}_singles.fastq; done	
+
+# Error correction with SPAdes
+
+cd qualTrimmed
+
+for file in *_R1_trimmed.fastq; do spades.py -o ${file%_R1_trimmed.fastq}_errorCorrected --only-error-correction -1 $file -2 ${file%_R1_trimmed.fastq}_R2_trimmed.fastq -t 8 -m 32 --disable-gzip-output; done 
 
 
+#house keeping, move files into a central folder and modify seq headers so they work downstream
 
 
 
