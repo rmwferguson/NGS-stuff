@@ -1,0 +1,62 @@
+# dereplicate
+
+vsearch --derep_fulllength 16S.fna --output unique.fasta --sizeout --minseqlength 50 --fasta_width 0 --minuniquesize 2 --relabel OTU
+
+# sort by size
+
+vsearch --sortbysize unique.fasta.fasta --output sorted.fasta 
+
+# remove chimeras denovo
+
+vsearch --uchime_denovo unique.fasta --nonchimeras nochimeras.fasta
+
+#Found 4178 (3.5%) chimeras, 108287 (91.4%) non-chimeras, and 6047 (5.1%) suspicious candidates in 118512 sequences.
+
+# OTU clustering at 97%
+
+vsearch --cluster_size nochimeras.fasta --id 0.97 --centroids rep_set.fasta
+
+# other option for cluster.
+#vsearch --cluster_smallmem sorted.fasta --id 0.97 --consout rep_set.fasta --usersort
+
+#### output
+48507218 nt in 108287 seqs, min 50, max 543, avg 448
+Indexing sequences 100%  
+Masking 100%
+Counting unique k-mers 100%  
+Clustering 100%  
+Writing clusters 100%  
+Clusters: 3934 Size min 1, max 5717, avg 27.5
+Singletons: 837, 0.8% of seqs, 21.3% of clusters
+Multiple alignments 100%  
+#####
+
+# count centroids
+rob@DT[test2] grep -c "^>" rep_set.fasta                       [ 2:23PM]
+3934
+
+# map inital seqs back onto OTU centroids
+
+vsearch --usearch_global 16S.fna --db rep_set.fasta --id 0.97 --uc otuMap.uc --threads 8  --log otuLog.log
+#
+## convert UC to OTU table
+
+python /home/rob/bin/PythonScripts/drive5_py/uc2otutab_mod.py otuMap.uc > otu.txt
+
+#python uc2otutab_mod.py map.uc > otu.txt  
+
+# classify with RDP (16S)
+
+java -Xmx1g -jar /home/rob/RDPTools/classifier.jar classify -o rdpclass97.txt $PWD/rep_set.fasta 
+
+
+
+
+############################ unused #################
+#simplify OTU names
+
+#awk 'BEGIN{OFS="";ORS="";count=0}{if ($0~/>/){if (NR>1) {print "\n"} print ">" count "\n"; count+=1;} else {print $0;}}' rep_set.fasta > rep_set_relabel.fasta
+
+
+
+
