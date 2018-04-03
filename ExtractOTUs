@@ -1,0 +1,20 @@
+# scprit to select specific OTUs from an OTU table and print to file
+
+## put something from the first line in your list if you want the headers.
+
+grep -w -F -f listOfIDs.txt -e targetOTUtable.txt > newfile.txt
+
+-w to prevent partial match
+-F fixed strings
+-f read serach pattern from file
+> print to this file ###.txt
+
+
+#format for list
+
+number # something from the first line in the target 
+aa #OTU IDs
+ac
+ae
+
+# format for OTU table is standard tab/csv ect.
