@@ -1,0 +1,47 @@
+Making a blast library to find pathogens
+
+
+## Step one - Make coustom blast database
+
+make fasta file of all seqs with taxon name as first bit of name e.g. 
+
+>Baculis anthrax NR232134 etc.
+aattccttgggg
+
+make database with cmd
+
+$ makeblastdb -in database/pathDB.fasta -out database/pathDB -dbtype nucl
+
+
+## Step two - search you seqs against this database
+
+seqs to search are in seqs.fasta, this only reterns hits with % ID > 97% 
+
+$ blastn -db database/pathDB -query rep_set.fna -perc_identity 97 > pathMatches.blastn -outfmt "6 qseqid pident stitle"
+
+# output formats
+
+output fomrat 10 looks the simplest so far. Gives a list of the matches for the querys. 
+
+eg. denovo0,Thermopolyspora,99.50,403,2,0,1,403,319,721,0.0, 734
+
+thease are the headers
+
+ 1. 	 qseqid 	 query (e.g., gene) sequence id
+ 2. 	 sseqid 	 subject (e.g., reference genome) sequence id
+ 3. 	 pident 	 percentage of identical matches
+ 4. 	 length 	 alignment length
+ 5. 	 mismatch 	 number of mismatches
+ 6. 	 gapopen 	 number of gap openings
+ 7. 	 qstart 	 start of alignment in query
+ 8. 	 qend 	 end of alignment in query
+ 9. 	 sstart 	 start of alignment in subject
+ 10. 	 send 	 end of alignment in subject
+ 11. 	 evalue 	 expect value
+ 12. 	 bitscore 	 bit score
+
+# top hit only
+
+blastn -db database/pathDB -query rep_set.fna -perc_identity 97 > pathMatches.blastn -outfmt "6 qseqid pident stitle" | sort -k1,1 -k12,12nr -k11,11n | sort -u -k1,1 --merge > best_single_hits.blastn
+
+
